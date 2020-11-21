@@ -1,0 +1,20 @@
+# docker-compose.yml
+version: '3'
+services:
+  database:
+    container_name: grafana-psql
+    image: postgres:12-alpine 
+    env_file:
+      - psql.env
+    volumes:
+      - database-data:/var/lib/postgresql/data/ # persist data even if container shuts down
+      - ./entrypoint:/docker-entrypoint-initdb.d
+    restart: always
+
+networks:
+  default:
+    external:
+      name: grafana
+
+volumes:
+  database-data: # named volumes can be managed easier using docker-compose

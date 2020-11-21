@@ -1,0 +1,19 @@
+# docker-compose.yml
+version: '3'
+services:
+  cpu_mem_monitor:
+    build: .
+    env_file:
+      - psql.env
+    volumes:
+      - /proc/meminfo:/host/meminfo # provide host data
+      - /proc/stat:/host/stat
+      - /proc/net/dev:/host/net/dev
+      - /etc/hostname:/host/hostname
+    restart: always
+
+# only needed if running on same host as postgres container and using bridge network to connect
+networks:
+  default:
+    external:
+      name: grafana
